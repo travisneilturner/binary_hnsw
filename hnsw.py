@@ -64,11 +64,6 @@ class HNSW(BaseModel):
        # Store (distance, neighbor) tuples in a list
         distance_neighbor_id_pairs = []
 
-        # Add origin's neighbors in the layer to the list
-        for neighbor_id in origin.neighbors.get(layer, []):
-            distance = hamming_distance_numpy(np.array(origin.point), np.array(self.nodes[neighbor_id].point))
-            distance_neighbor_id_pairs.append((distance, neighbor_id))
-
         all_node_ids_in_layer = set(self.layers[layer])
         remaining_neighbor_ids = all_node_ids_in_layer - set(origin.neighbors.get(layer, []))
         
