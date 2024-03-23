@@ -89,7 +89,7 @@ class HNSW(BaseModel):
         nearest_neighbor_for_layer = (None, float("inf"))
         for layer in range(self.max_layers, -1, -1):
             if nearest_neighbor_for_layer[0] is None:
-                searchNodes = self.layers.get(layer, [])  # Assuming this is a list of nodes
+                searchNodes = self.layers.get(layer, []) 
             else:
                 searchNodes = list(nearest_neighbor_for_layer[0].neighbors.get(layer, []))
              # Add origin's neighbors in the layer to the list
