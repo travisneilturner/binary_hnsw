@@ -63,16 +63,14 @@ class HNSW(BaseModel):
     def _find_nearest_k_in_layer(self, origin: HNSWNode, layer: int, k: int = 1) -> List[HNSWNode]:
        # Store (distance, neighbor) tuples in a list
         distance_neighbor_id_pairs = []
-
-        all_node_ids_in_layer = set(self.layers[layer])
-        remaining_neighbor_ids = all_node_ids_in_layer - set(origin.neighbors.get(layer, []))
         
         # Add remaining neighbors to the list
-        for remaining_neighbor_id in remaining_neighbor_ids:
-            if self.nodes[origin.id].__eq__(self.nodes[remaining_neighbor_id]):
+        # how can we avoid scanning over all nodes in the layer?
+        for neighbor_id in set(self.layers[layer]):
+            if self.nodes[origin.id].__eq__(self.nodes[neighbor_id]):
                 continue
-            distance = hamming_distance_numpy(np.array(origin.point), np.array(self.nodes[remaining_neighbor_id].point))
-            distance_neighbor_id_pairs.append((distance, remaining_neighbor_id))
+            distance = hamming_distance_numpy(np.array(origin.point), np.array(self.nodes[neighbor_id].point))
+            distance_neighbor_id_pairs.append((distance, neighbor_id))
 
         # Sort the combined list by distance
         distance_neighbor_id_pairs.sort(key=lambda x: x[0])
